@@ -1,6 +1,7 @@
 var articleModel = require('../models/article');
 var userModel = require('../models/users');
 
+var dateFormat = require('./function');
 var express = require('express');
 var router = express.Router();
 
@@ -12,6 +13,7 @@ router.get('/', function(req, res, next) {
       console.log(users);
       res.render('users', {
         usersList: users,
+        dateFormat
       });
     }
   )

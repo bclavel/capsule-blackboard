@@ -39,19 +39,16 @@
           <div class="list-group">
           <% for (var i = 0 ; i < taskList.tasks.length; i++) {%>
             <a href="#" class="list-group-item list-group-item-action <% if (taskList.tasks[i].date_cloture) {%>list-group-item-success<%} else { if (taskList.tasks[i].date_due < new Date()) {%>list-group-item-danger<%} else {%>action<%}}%>">
-              <% var dateInsrt = taskList.tasks[i].date_insert %>
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1"><%= taskList.tasks[i].name %></h5>
                   <small>
-                    Date de la demande: <%= dateInsrt.getDate() %>/<%= dateInsrt.getMonth() + 1 %>/<%= dateInsrt.getFullYear() %> |
+                    Date de la demande: <%= dateFormat(taskList.tasks[i].date_insert) %> |
                     Catégorie : <%= taskList.tasks[i].category %> |
                     Owner : <%= taskList.tasks[i].owner %>
                   </small>
                 </div>
                 <p class="mb-1"><%= taskList.tasks[i].description %></p>
-                <% var dateDue = taskList.tasks[i].date_due %>
-                <% var dateCltre = taskList.tasks[i].date_cloture %>
-                <small><% if (!taskList.tasks[i].date_cloture) {%><i class="fas fa-exclamation-circle"></i> Echéance: <%= dateDue.getDate() %>/<%= dateDue.getMonth() + 1 %>/<%= dateDue.getFullYear() %><%} else {%><i class="far fa-check-square"></i> Clôture: <%= dateCltre.getDate() %>/<%= dateCltre.getMonth() + 1 %>/<%= dateCltre.getFullYear() %> <% } %></small>
+                <small><% if (!taskList.tasks[i].date_cloture) {%><i class="fas fa-exclamation-circle"></i> Echéance: <%= dateFormat(taskList.tasks[i].date_due) %><%} else {%><i class="far fa-check-square"></i> Clôture: <%= dateFormat(taskList.tasks[i].date_cloture) %> <% } %></small>
             </a>
           <% } %>
 

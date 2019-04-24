@@ -51,8 +51,7 @@
                   <td><% if (messagesList.messages[i].read == false ) {%><i class="fas fa-envelope" </i><%} else {%><i class="fas fa-envelope-open"></i> <%}%> </td>
                   <td><%= messagesList.messages[i].title %></td>
                   <td><%= messagesList.messages[i].sender %></td>
-                  <% var date = messagesList.messages[i].date_exp %>
-                  <td><%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %></td>
+                  <td><%= dateFormat(messagesList.messages[i].date_exp) %></td>
                 </tr>
               <% } %>
             </tbody>

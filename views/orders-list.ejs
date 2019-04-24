@@ -77,77 +77,40 @@
                     </tr>
                   </tfoot>
                   <tbody>
-                    <tr>
-                      <td>22/01/19</td>
-                      <td>876FFR45</td>
-                      <td>869€</td>
-                      <td>23€</td>
-                      <td class="status-secondary"><i class="fas fa-circle"></i></td>
-                      <td>-</td>
-                      <td class="status-secondary"><i class="fas fa-circle"></i></td>
-                      <td>-</td>
-                      <td>22 Rue des Martyrs</td>
-                      <td>Paris</td>
-                      <td>75009</td>
-                      <td><a href="./order.html">voir</a></td>
-                    </tr>
-                    <tr>
-                      <td>18/01/19</td>
-                      <td>U60998SD</td>
-                      <td>654€</td>
-                      <td>29€</td>
-                      <td class="status-success"><i class="fas fa-circle"></i></td>
-                      <td>18/01/19</td>
-                      <td class="status-secondary"><i class="fas fa-circle"></i></td>
-                      <td>-</td>
-                      <td>76 Avenue Georges 5</td>
-                      <td>Paris</td>
-                      <td>75008</td>
-                      <td><a href="./order.html">voir</a></td>
-                    </tr>
-                    <tr>
-                      <td>16/01/19</td>
-                      <td>0JGGDTD5S</td>
-                      <td>910€</td>
-                      <td>33€</td>
-                      <td class="status-success"><i class="fas fa-circle"></i></td>
-                      <td>16/01/19</td>
-                      <td class="status-success"><i class="fas fa-circle"></i></td>
-                      <td>17/01/19</td>
-                      <td>7 Rue d'Athènes</td>
-                      <td>Paris</td>
-                      <td>75009</td>
-                      <td><a href="./order.html">voir</a></td>
-                    </tr>
-                    <tr>
-                      <td>07/01/19</td>
-                      <td>ZEDF54457</td>
-                      <td>430€</td>
-                      <td>23€</td>
-                      <td class="status-danger"><i class="fas fa-circle"></i></td>
-                      <td>refusé</td>
-                      <td class="status-secondary"><i class="fas fa-circle"></i></td>
-                      <td>-</td>
-                      <td>13 Rue Tupin</td>
-                      <td>Lyon</td>
-                      <td>69002</td>
-                      <td><a href="./order.html">voir</a></td>
-                    </tr>
-                    <tr>
-                      <td>03/01/19</td>
-                      <td>JHS5699J</td>
-                      <td>632€</td>
-                      <td>27€</td>
-                      <td class="status-success"><i class="fas fa-circle"></i></td>
-                      <td>03/01/19</td>
-                      <td class="status-success"><i class="fas fa-circle"></i></td>
-                      <td>03/01/19</td>
-                      <td>33 Rue Malesherbes</td>
-                      <td>Lyon</td>
-                      <td>69006</td>
-                      <td><a href="./order.html">voir</a></td>
-                    </tr>
 
+                    <% for (var i = 0; i < orderList.length; i++) {%>
+                      <tr>
+                        <td><%= dateFormat(orderList[i].insert_date) %></td>
+                        <td><%= orderList[i].user %></td>
+                        <td><%= orderList[i].total %>€</td>
+                        <td><%= orderList[i].shipping_cost %>€</td>
+                        <% var statusPaymentClass = 'status-secondary';
+                        if (orderList[i].status_payment == 'refused') {
+                          statusPaymentClass = 'status-danger'
+                        } else if (orderList[i].status_payment == 'validated') {
+                          statusPaymentClass = 'status-success'
+                        }%>
+                        <td class="<%=statusPaymentClass%>"><i class="fas fa-circle"></i></td>
+                        <td><% if (orderList[i].date_payment) {%>
+                          <%= dateFormat(orderList[i].date_payment) %>
+                          <%} else if (orderList[i].status_payment == 'refused') {%>
+                            refusé
+                            <%} else {%>
+                              -
+                              <%}%>
+                            </td>
+                        <% var statusShipmentClass = 'status-secondary';
+                        if (orderList[i].status_shipment == true) {
+                          statusShipmentClass = 'status-success'
+                        }%>
+                        <td class="<%=statusShipmentClass%>"><i class="fas fa-circle"></i></td>
+                        <td><% if (orderList[i].date_shipment) {%><%= dateFormat(orderList[i].date_shipment) %><%} else {%>-<%}%></td>
+                        <td><%= orderList[i].delivery_address %></td>
+                        <td><%= orderList[i].delivery_city %></td>
+                        <td><%= orderList[i].delivery_zipcode %></td>
+                        <td><a href="/order?id=<%= orderList[i]._id %>">voir</a></td>
+                      </tr>
+                    <% } %>
                   </tbody>
                 </table>
               </div>
