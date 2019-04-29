@@ -84,12 +84,10 @@ router.get('/messages', function(req, res, next) {
 
 
 router.post('/addMessage', function(req, res, next) {
-
   userModel.findOne({
       _id: '5cbf15233e02d52a840ad607'
     },
     function(err, user) {
-
       user.messages.push({
         title: req.body.title,
         content: req.body.content,
@@ -102,7 +100,6 @@ router.post('/addMessage', function(req, res, next) {
           console.log(user);
         }
       )
-
       res.render('index', {});
     }
   )
@@ -123,26 +120,21 @@ router.post('/addOrder', function(req, res, next) {
     delivery_zipcode: req.body.delivery_zipcode,
     user: req.body.user_id,
   });
-
   newOrder.save(
     function(error, order) {
       console.log('save ->', order);
     }
   )
-
   res.render('index', {});
 });
 
 
 router.get('/order', function(req, res, next) {
-
   orderModel.findById(req.query.id)
   .populate('user')
   .populate('articles')
   .exec (function (err, order) {
-
     console.log('order found ->', order);
-
     res.render('order', {
       order,
       dateFormat
@@ -152,15 +144,12 @@ router.get('/order', function(req, res, next) {
 
 router.post('/addArticleToOrder', function(req, res, next) {
   console.log('req.body ->', req.body);
-
   orderModel.findOne({
       _id: req.body.order_id
     },
     function(err, order) {
       console.log('order found ->', order);
-
       order.articles.push(req.body.article_id);
-
       order.save(
         function(error, order) {
           console.log('order save ->', order);
@@ -171,7 +160,6 @@ router.post('/addArticleToOrder', function(req, res, next) {
 });
 
 var orderList = []
-
 router.get('/orders-list', function(req, res, next) {
   orderModel.find(
     function (err, orders) {
@@ -184,7 +172,6 @@ router.get('/orders-list', function(req, res, next) {
 });
 
 var taskList = []
-
 router.get('/tasks', function(req, res, next) {
   userModel.findById('5cbf15233e02d52a840ad607',
     function(err, user) {
@@ -196,14 +183,11 @@ router.get('/tasks', function(req, res, next) {
   )
 });
 
-
 router.post('/addTask', function(req, res, next) {
-
   userModel.findOne({
       _id: '5cbf15233e02d52a840ad607'
     },
     function(err, user) {
-
       user.tasks.push({
         name: req.body.name,
         description: req.body.description,
@@ -218,12 +202,95 @@ router.post('/addTask', function(req, res, next) {
           console.log(user);
         }
       )
-
       res.render('index', {});
     }
   )
-
 });
 
+
+
+router.get('/dataviz', async function(req, res, next) {
+
+  //Le nombre d'utilisateurs inscrits par mois
+  var userPerMonthReq = userModel.aggregate();
+  userPerMonthReq.group({_id : {Year : {$year: '$date_insert'}, Month : {$month: '$date_insert'}}, countUsers : { $sum : 1}});
+  userPerMonthReq.sort({_id : 1})
+  var userPerMonth = await userPerMonthReq.exec(console.log('1'));
+
+  // Le nombre d'utilisateurs inscrits par sexe
+  var userPerGenderReq = userModel.aggregate();
+  userPerGenderReq.group({_id : '$gender', countUserGender : {$sum : 1}})
+  var userPerGender = await userPerGenderReq.exec(console.log('2'));
+
+  // Le panier moyen des commandes payées par mois
+  var avgOrderPerMonthReq = orderModel.aggregate();
+  avgOrderPerMonthReq.group({_id : {
+    Year : {$year: '$date_insert'},
+    Month : {$month: '$date_insert'}
+    },
+    countOrder : {$sum : 1}})
+  avgOrderPerMonthReq.sort({_id : 1})
+  var avgOrderPerMonth = await avgOrderPerMonthReq.exec(console.log('3'));
+
+  // Le nombre et le chiffre d'affaire des commandes payées et expédiées par jour
+  var numberTotalOrderPerDayReq = orderModel.aggregate();
+  numberTotalOrderPerDayReq.match({status_shipment : true, status_payment : 'valided'});
+  numberTotalOrderPerDayReq.group({_id : {
+    Year : {$year: '$date_insert'},
+    Month : {$month: '$date_insert'},
+    Day : {$dayOfMonth : '$date_insert'}
+    },
+    countOrder : {$sum : 1},
+    countTotal : {$sum : '$total'}
+  })
+  numberTotalOrderPerDayReq.sort({_id : 1})
+  var numberTotalOrderPerDay = await numberTotalOrderPerDayReq.exec(console.log('4'));
+
+  var totalStock = 0
+  // Le nombre total de commandes
+  var totalArticle = articleModel.find()
+  await totalArticle.exec(function (err, data) {
+    for (var i = 0; i < data.length; i++) {
+      totalStock += data[i].stock
+    }
+    console.log('5');
+  })
+
+  var unreadMessages = 0
+  // Le nombre de messages non lus
+  var getUser = userModel.findById('5cbf15233e02d52a840ad607')
+  await getUser.exec(function (err, data) {
+    var unreadMessages = 0
+    for (var i = 0; i < data.messages.length; i++) {
+      if (data.messages[i].read == false) {
+        unreadMessages++
+      }
+    }
+    console.log('6');
+  })
+
+  var openTasks = 0
+  // Le nombre de tâches non cloturées
+  var getUser = userModel.findById('5cbf15233e02d52a840ad607')
+  await getUser.exec(function (err, data) {
+    var openTasks = 0
+    for (var i = 0; i < data.tasks.length; i++) {
+      if (!data.tasks[i].date_cloture) {
+        openTasks++
+      }
+    }
+    console.log('7');
+  })
+
+    res.render('chart', {
+      userPerMonth,
+      userPerGender,
+      avgOrderPerMonth,
+      numberTotalOrderPerDay,
+      totalStock,
+      unreadMessages,
+      openTasks,
+    });
+  })
 
 module.exports = router;

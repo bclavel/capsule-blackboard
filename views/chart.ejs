@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BlackBoard</title>
+
+    <!-- Bootstrap core CSS-->
+    <link href="../javascripts/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="../javascripts/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="../javascripts/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../stylesheets/sb-admin.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <%- include('header') %>
+
+    <div id="wrapper">
+
+      <%- include('sidebar') %>
+
+      <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+          <div class="card mb-3">
+            <div class="card-header">
+            <i class="fas fa-chart-pie"></i>
+             Nombre d'inscrits par mois </div>
+            <div class="card-body">
+              <canvas id="userCountByMonth" data-chartviz='<%= JSON.stringify(userPerMonth) %>'></canvas>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header">
+            <i class="fas fa-chart-pie"></i>
+             Panier moyen de commandes par mois </div>
+            <div class="card-body">
+              <canvas id="ordersAvgByMonth" data-chartviz='<%= JSON.stringify(avgOrderPerMonth) %>'></canvas>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header">
+            <i class="fas fa-chart-pie"></i>
+             Nombre de commandes par jour </div>
+            <div class="card-body">
+              <canvas id="ordersByDay" data-chartviz='<%= JSON.stringify(numberTotalOrderPerDay) %>'></canvas>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header">
+            <i class="fas fa-chart-pie"></i>
+             repartition des inscrits par sexe  </div>
+            <div class="card-body">
+              <canvas id="userCountByGender" data-chartviz='<%= JSON.stringify(userPerGender) %>'></canvas>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright © Paris Saint-Germain</span>
+            </div>
+          </div>
+        </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../javascripts/vendor/jquery/jquery.min.js"></script>
+    <script src="../javascripts/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../javascripts/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+    <script src="../javascripts/vendor/chart.js/Chart.min.js"></script>
+    <script src="../javascripts/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="../javascripts/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../javascripts/sb-admin.min.js"></script>
+
+    <!-- Demo scripts for this page-->
+    <script src="../javascripts/demo/datatables-demo.js"></script>
+    <script src="../javascripts/demo/chart-area-demo.js"></script>
+
+    <script type="text/javascript" src="../javascripts/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  </body>
+
+</html>
